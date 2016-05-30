@@ -1,8 +1,12 @@
-import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 import {bootstrap} from '@angular/platform-browser-dynamic';
 import {provide, enableProdMode} from '@angular/core';
-import {HTTP_PROVIDERS} from '@angular/http';
-import {ROUTER_PROVIDERS} from '@angular/router-deprecated';
+import {Store, provideStore, usePreMiddleware, usePostMiddleware} from '@ngrx/store';
+import {actionLogger, stateLogger, localStorageMiddleware} from './app/middleware';
+import {LocalStorageService} from './app/service';
+import {reset, RESET_STATE} from './app/reset';
+import {people} from './app/people';
+import {partyFilter} from './app/party-filter';
+
 
 import {SeedApp} from './app/seed-app';
 
@@ -10,8 +14,8 @@ import {SeedApp} from './app/seed-app';
 // enableProdMode()
 
 bootstrap(SeedApp, [
-  HTTP_PROVIDERS,
-  ROUTER_PROVIDERS,
-  provide(LocationStrategy, {useClass: HashLocationStrategy})
+  LocalStorageService,
+  //wrap people in reset meta-reducer
+  provideStore({people})
 ])
 .catch(err => console.error(err));
